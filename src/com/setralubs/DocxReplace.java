@@ -22,6 +22,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     static {
         validTypes.add("docx");
         validTypes.add("pdf");
+        validTypes.add("html");
     }
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         PrintWriter out;
