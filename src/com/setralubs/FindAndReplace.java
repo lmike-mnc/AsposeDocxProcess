@@ -1,9 +1,11 @@
 package com.setralubs;
 
 import com.aspose.words.*;
+import jdk.internal.dynalink.support.ClassLoaderGetterContextProvider;
 
 import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +32,9 @@ public class FindAndReplace {
         options.setReplacingCallback(new ReplaceEvaluator(map));
 
         doc.getRange().replace(Pattern.compile(regex), "", options);
-        String outName= DATA_DIR + "Range.ReplaceWithEvaluator_Out.docx";
-        doc.save(outName);
-        Runtime.getRuntime().exec("gio open "+outName);
+        //String outName= DATA_DIR + "Range.ReplaceWithEvaluator_Out.docx";
+        //doc.save(outName);
+        //Runtime.getRuntime().exec("gio open "+outName);
     }
 
     /**
@@ -216,9 +218,50 @@ public class FindAndReplace {
         return ret;
     }
 
+    public Document replaceWtables(InputStream isTarget, Map<String,InputStream> mapSources, Map<String,String> mapFields) throws Exception {
+        Document docTarget=new Document(isTarget);
+        final Map <String,Table> mapTables=getTablesNamesMap(docTarget);
+        if(mapSources!=null && !mapSources.isEmpty()) mapSources.entrySet().stream()
+                .filter(e->mapTables.containsKey(e.getKey()))
+                .forEach(e->{
+                            Table tbl2replace=mapTables.get(e.getKey());
+                            try {
+                                //first table in source doc
+                                //Table tblSource= (Table) (new Document(e.getValue())).getChildNodes(NodeType.TABLE, true).get(0);
+                                Document doc=new Document(e.getValue());
+                                System.out.println("replacing table: "+e.getKey());
+                                insertDocument(tbl2replace,doc);
+                                tbl2replace.remove();
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                        }
+                );
+        if (mapFields!=null)replace(docTarget,"(<.+?>)", mapFields);
+        return docTarget;
+    }
+
     public static void main(String[] args) throws Exception {
+        Map<String,String> map=new HashMap<String, String>();
+        //<ADD4_POSITION> <ADD4_WHOM>
+        map.put("<ADD4_POSITION>","Генерала");
+        map.put("<ADD4_WHOM>","Кузнецова");
+        File tmp=File.createTempFile("out",".pdf");
+        String outName=tmp.getAbsolutePath();//DATA_DIR + "out.pdf";
         FindAndReplace obj=new FindAndReplace();
-        Document doc = new Document(DATA_DIR + "add4_test.docx");
+        Map<String,InputStream> mapSource=new HashMap<>();
+        mapSource.put("add4_Грузополучатели"
+                ,obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "receivers.doc"));
+        Document docTarget=obj.replaceWtables(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx")
+            ,mapSource
+            ,map);
+        docTarget.save(outName);
+        System.out.println("saved to: "+outName);
+        System.out.println(System.getProperty("os.name"));
+        Desktop.getDesktop().open(tmp);
+        if(true)return;
+        //target document
+        Document doc = new Document(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx"));
         System.out.println(obj.getTablesNames(doc));
         //System.exit(0);
 /*
@@ -234,18 +277,23 @@ public class FindAndReplace {
         obj.tablesProcess(doc);
         obj.getTablesNamesMap(doc);
 */
-        Document doc1=new Document(DATA_DIR + "receivers.doc");
+        //source document to insert
+        Document doc1=new Document(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "receivers.doc"));
+        //table node to replace
         Table tbl1=obj.getTables(doc).get(0).table;
+        //table replace with
         Table tbl2=obj.getTables(doc1).get(0).table;
         //obj.replaceRowsText(tbl1, tbl2);
         obj.insertDocument(tbl1,doc1);
+        //remove first table
         tbl1.remove();
         // save
         //String outName=DATA_DIR + "out.docx";
-        String outName=DATA_DIR + "out.pdf";
         doc.save(outName);
+        System.out.println("saved to: "+outName);
         System.out.println(System.getProperty("os.name"));
-        Desktop.getDesktop().open(new File(outName));
+        Desktop.getDesktop().open(tmp);
+/*
         System.exit(0);
 
         obj.getFields(new Document(DATA_DIR + "SpA_SupAgreement.docx"), "(<.+?>)");
@@ -253,5 +301,6 @@ public class FindAndReplace {
         map.put("<SPA_POSITION>","Генерал");
         map.put("<SPA_WHOM>","Кузнецов");
         obj.replace(new Document(DATA_DIR + "SpA_SupAgreement.docx"), "(<.+?>)", map);
+*/
     }
 }

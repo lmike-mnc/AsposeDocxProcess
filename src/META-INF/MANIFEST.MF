@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: commons-io-2.6.jar commons-codec-1.8.jar slf4j-api.jar slf
+ 4j-jdk14.jar aspose-words-19.6-jdk17.jar
+Main-Class: 
+
