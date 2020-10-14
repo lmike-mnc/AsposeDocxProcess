@@ -24,7 +24,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         validTypes.add("pdf");
         validTypes.add("html");
     }
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;
         try {
             out = response.getWriter();
@@ -43,7 +43,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 JsonNode tmpNode;
                 String filePath;
                 String fileType;
-                boolean bOpen=false;
+                boolean bOpen;
                 JsonNode fieldsNode;
 
                 tmpNode=jsonNode.get("filepath");
@@ -124,7 +124,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
 
 }
 
-    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
+    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;
         try {
             out = response.getWriter();
