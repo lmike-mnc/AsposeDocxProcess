@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class FindAndReplace {
+    static String fieldRegex = "(<.+?>)";
     final com.aspose.words.License license;
     static final String DATA_DIR = "res/";
 
@@ -36,6 +37,13 @@ public class FindAndReplace {
         //String outName= DATA_DIR + "Range.ReplaceWithEvaluator_Out.docx";
         //doc.save(outName);
         //Runtime.getRuntime().exec("gio open "+outName);
+    }
+
+    void getFields(Document doc, String regex, Map<String,String[]> map) throws Exception {
+        FindReplaceOptions options = new FindReplaceOptions();
+        options.setReplacingCallback(new FindEvaluator(map));
+        doc.getRange().replace(Pattern.compile(regex), "", options);
+
     }
 
     /**
@@ -241,7 +249,7 @@ public class FindAndReplace {
                     );
         }
         if (mapFields!=null){
-            replace(docTarget,"(<.+?>)", mapFields);
+            replace(docTarget,fieldRegex, mapFields);
         }
         return docTarget;
     }
