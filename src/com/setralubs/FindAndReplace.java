@@ -3,6 +3,7 @@ package com.setralubs;
 import com.aspose.cells.Workbook;
 import com.aspose.words.*;
 import jdk.internal.dynalink.support.ClassLoaderGetterContextProvider;
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import java.awt.*;
 import java.io.File;
@@ -110,7 +111,7 @@ public class FindAndReplace {
      * @return map as table title, table object
      */
     public Map<String,Table> getTablesNamesMap(Document doc){
-        Map<String,Table> map=new HashMap<String, Table>();
+        Map<String,Table> map=new CaseInsensitiveMap<>();
         @SuppressWarnings("unchecked")
         NodeCollection<Table> tables=doc.getChildNodes(NodeType.TABLE, true);
         int i=0;
