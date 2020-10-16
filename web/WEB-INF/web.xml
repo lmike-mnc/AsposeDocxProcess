@@ -13,8 +13,16 @@
         <servlet-name>DocxReplace</servlet-name>
         <servlet-class>com.setralubs.DocxReplace</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DocxInfo</servlet-name>
+        <servlet-class>com.setralubs.DocxInfo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DocxReplace</servlet-name>
         <url-pattern>/DocxReplace</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DocxInfo</servlet-name>
+        <url-pattern>/DocxInfo</url-pattern>
     </servlet-mapping>
 </web-app>
