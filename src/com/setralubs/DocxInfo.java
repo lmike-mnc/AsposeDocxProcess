@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ import static com.setralubs.DocxReplace.DEF_TARGET_EXT;
 
 @WebServlet(name = "DocxInfo")
 public class DocxInfo extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         PrintWriter out;
         try {
 //https://docs.oracle.com/javaee/5/api/javax/servlet/ServletResponse.html#getWriter()
@@ -35,8 +34,7 @@ public class DocxInfo extends HttpServlet {
             List<String> errs=new ArrayList<>();
             try {
                 JsonNode jsonNode = objectMapper.readTree(request.getInputStream());
-                Map<String,String> mapTmp;
-                Map<String,String[]> mapFields = new HashMap<>();
+                Map<String,String[]> mapFields;
                 List<String> tblNames;
 
                 JsonNode tmpNode;
@@ -90,7 +88,7 @@ public class DocxInfo extends HttpServlet {
 
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
 
