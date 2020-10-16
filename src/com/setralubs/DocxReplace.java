@@ -17,8 +17,10 @@ import java.util.stream.Collectors;
 import static com.setralubs.FindAndReplace.DATA_DIR;
 
 public class DocxReplace extends javax.servlet.http.HttpServlet {
+    public static final String DEF_TARGET_EXT = "docx";
     //valid output types
     static List<String>validTypes=new ArrayList<>();
+
     static {
         validTypes.add("docx");
         validTypes.add("pdf");
@@ -38,6 +40,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 JsonNode jsonNode = objectMapper.readTree(request.getInputStream());
                 Map<String,String> mapTmp;
                 Map<String,String> mapFields = null;
+                //map for replacement sources
                 Map<String,InputStream> mapSources = new HashMap<>();
 
                 JsonNode tmpNode;
@@ -62,6 +65,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 }
                 tmpNode=jsonNode.get("sources");
                 if (tmpNode!=null){
+                    //assign source documents InputStream to map
                     mapTmp = objectMapper.convertValue(tmpNode, new TypeReference<Map<String, String>>(){});
                     mapTmp.entrySet().stream()
                             .filter(e->{
@@ -85,14 +89,20 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                     System.out.println("extension: "+ext);
                     params.put("filetype",fileType);
                     params.put("input-type",ext);
-                    if (ext.equalsIgnoreCase("docx")) {
+                    //target doc checking
+                    if (ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
                         FindAndReplace obj = new FindAndReplace();
                         Document docTarget = obj.replaceWtables(new FileInputStream(filePath),
                                 mapSources, mapFields);
-                        File tmp = File.createTempFile("out", "."+fileType);
-                        filePath = tmp.getAbsolutePath();
-                        docTarget.save(filePath);
-                        params.put("isConverted",true);
+                        //if should be changed
+                        if (!mapSources.isEmpty()
+                                || mapFields!=null
+                                || !fileType.equalsIgnoreCase(DEF_TARGET_EXT)) {
+                            File tmp = File.createTempFile("out", "." + fileType);
+                            filePath = tmp.getAbsolutePath();
+                            params.put("isConverted",true);
+                            docTarget.save(filePath);
+                        }else params.put("isConverted",false);
                         params.put("filepath",filePath);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);
