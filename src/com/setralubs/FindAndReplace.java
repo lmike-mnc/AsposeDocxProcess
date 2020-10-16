@@ -1,5 +1,6 @@
 package com.setralubs;
 
+import com.aspose.cells.Workbook;
 import com.aspose.words.*;
 import jdk.internal.dynalink.support.ClassLoaderGetterContextProvider;
 
@@ -220,24 +221,28 @@ public class FindAndReplace {
 
     public Document replaceWtables(InputStream isTarget, Map<String,InputStream> mapSources, Map<String,String> mapFields) throws Exception {
         Document docTarget=new Document(isTarget);
-        final Map <String,Table> mapTables=getTablesNamesMap(docTarget);
-        if(mapSources!=null && !mapSources.isEmpty()) mapSources.entrySet().stream()
-                .filter(e->mapTables.containsKey(e.getKey()))
-                .forEach(e->{
-                            Table tbl2replace=mapTables.get(e.getKey());
-                            try {
-                                //first table in source doc
-                                //Table tblSource= (Table) (new Document(e.getValue())).getChildNodes(NodeType.TABLE, true).get(0);
-                                Document doc=new Document(e.getValue());
-                                System.out.println("replacing table: "+e.getKey());
-                                insertDocument(tbl2replace,doc);
-                                tbl2replace.remove();
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
+        if(mapSources!=null && !mapSources.isEmpty()){
+            final Map <String,Table> mapTables=getTablesNamesMap(docTarget);
+            mapSources.entrySet().stream()
+                    .filter(e->mapTables.containsKey(e.getKey()))
+                    .forEach(e->{
+                                Table tbl2replace=mapTables.get(e.getKey());
+                                try {
+                                    //first table in source doc
+                                    //Table tblSource= (Table) (new Document(e.getValue())).getChildNodes(NodeType.TABLE, true).get(0);
+                                    Document doc=new Document(e.getValue());
+                                    System.out.println("replacing table: "+e.getKey());
+                                    insertDocument(tbl2replace,doc);
+                                    tbl2replace.remove();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                }
                             }
-                        }
-                );
-        if (mapFields!=null)replace(docTarget,"(<.+?>)", mapFields);
+                    );
+        }
+        if (mapFields!=null){
+            replace(docTarget,"(<.+?>)", mapFields);
+        }
         return docTarget;
     }
 
@@ -246,9 +251,13 @@ public class FindAndReplace {
         //<ADD4_POSITION> <ADD4_WHOM>
         map.put("<ADD4_POSITION>","Генерала");
         map.put("<ADD4_WHOM>","Кузнецова");
+        File tmpDocx=File.createTempFile("out",".docx");
         File tmp=File.createTempFile("out",".pdf");
         String outName=tmp.getAbsolutePath();//DATA_DIR + "out.pdf";
         FindAndReplace obj=new FindAndReplace();
+        //Workbook workbook = new Workbook(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "server-proposal.xlsx"));
+        //workbook.save(tmpDocx.getAbsolutePath(), SaveFormat.DOCX);
+        //Desktop.getDesktop().open(tmpDocx);
         Map<String,InputStream> mapSource=new HashMap<>();
         mapSource.put("add4_Грузополучатели"
                 ,obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "receivers.doc"));
