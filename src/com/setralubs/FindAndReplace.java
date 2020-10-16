@@ -56,7 +56,7 @@ public class FindAndReplace {
     Map<String,String[]> getFields(Document doc, String regex) throws Exception {
         String dataDir="res/";
         FindReplaceOptions options = new FindReplaceOptions();
-        Map<String,String[]> map=new HashMap<String, String[]>();
+        Map<String,String[]> map= new CaseInsensitiveMap<>();
         options.setReplacingCallback(new FindEvaluator(map));
         doc.getRange().replace(Pattern.compile(regex), "", options);
         return map;
