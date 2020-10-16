@@ -29,8 +29,10 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;
         try {
+            response.setContentType("application/json;charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
+
             out = response.getWriter();
-            response.setContentType("application/json; charset=utf-8");
             Map<String, Object> params = new HashMap<>();
             params.put("requestType",request.getMethod());
             //String sout = "{\"requestType\":\"" + request.getMethod() + "\"";
@@ -137,8 +139,9 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;
         try {
+            response.setContentType("application/json;charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
             out = response.getWriter();
-            response.setContentType("application/json; charset=utf-8");
             Map<String, Object> params = new HashMap<>();
             params.put("requestType",request.getMethod());
             //String sout = "{\"requestType\":\"" + request.getMethod() + "\"";
