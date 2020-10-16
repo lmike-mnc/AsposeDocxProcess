@@ -4,6 +4,7 @@ import com.aspose.words.Document;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
@@ -43,7 +44,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 Map<String,String> mapTmp;
                 Map<String,String> mapFields = null;
                 //map for replacement sources
-                Map<String,InputStream> mapSources = new HashMap<>();
+                Map<String,InputStream> mapSources = new CaseInsensitiveMap<>();
 
                 JsonNode tmpNode;
                 String filePath;
@@ -58,7 +59,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 fieldsNode=jsonNode.get("fields");
                 System.out.println("filepath: " + filePath);
                 if (fieldsNode!=null){
-                    mapFields = objectMapper.convertValue(fieldsNode, new TypeReference<Map<String, String>>(){});
+                    mapFields = objectMapper.convertValue(fieldsNode, new TypeReference<CaseInsensitiveMap<String, String>>(){});
                     System.out.println("fields:\n"+
                             mapFields.entrySet().stream()
                                     .map(e -> e.getKey() + "=" + e.getValue())
