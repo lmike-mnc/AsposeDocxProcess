@@ -37,26 +37,18 @@ public class DocxInfo extends HttpServlet {
                 JsonNode jsonNode = objectMapper.readTree(request.getInputStream());
                 Map<String,String> mapTmp;
                 Map<String,String[]> mapFields = new HashMap<>();
-                List<String> tblNames=null;
-                //map for replacement sources
-                Map<String, InputStream> mapSources = new HashMap<>();
+                List<String> tblNames;
 
                 JsonNode tmpNode;
                 String filePath;
-                String fileType;
-                boolean bOpen;
-                JsonNode fieldsNode;
 
                 tmpNode=jsonNode.get("filepath");
                 filePath = tmpNode==null ? null : tmpNode.asText();
-                tmpNode=jsonNode.get("filetype");
-                fileType = tmpNode==null || !DocxReplace.validTypes.contains(tmpNode.asText())?"pdf":tmpNode.asText();
                 System.out.println("filepath: " + filePath);
                 //replace and convert
                 if(filePath!=null){
                     String ext=FilenameUtils.getExtension(filePath);
                     System.out.println("extension: "+ext);
-                    params.put("filetype",fileType);
                     params.put("input-type",ext);
                     //target doc checking
                     if (ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
@@ -69,11 +61,9 @@ public class DocxInfo extends HttpServlet {
                         params.put("fields",mapFields);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);
-                        params.put("isConverted",false);
                     }
                 }else{
                     errs.add("targetFileError> input file path is null");
-                    params.put("isConverted",false);
                 }
 /*
                 tmpNode =jsonNode.get("open");
