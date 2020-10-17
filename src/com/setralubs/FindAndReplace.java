@@ -1,8 +1,6 @@
 package com.setralubs;
 
-import com.aspose.cells.Workbook;
 import com.aspose.words.*;
-import jdk.internal.dynalink.support.ClassLoaderGetterContextProvider;
 import org.apache.commons.collections4.map.CaseInsensitiveMap;
 
 import java.awt.*;
@@ -28,7 +26,7 @@ public class FindAndReplace {
      * @param doc Aspose document
      * @param regex search expression (ex "\<.+\>" angle bracket for fields tag)
      * @param map fields name with values to replace
-     * @throws Exception
+     * @throws Exception replace exception
      */
     void replace(Document doc, String regex, Map<String,String> map) throws Exception {
         FindReplaceOptions options = new FindReplaceOptions();
@@ -39,22 +37,22 @@ public class FindAndReplace {
         //doc.save(outName);
         //Runtime.getRuntime().exec("gio open "+outName);
     }
-
+/*
     void getFields(Document doc, String regex, Map<String,String[]> map) throws Exception {
         FindReplaceOptions options = new FindReplaceOptions();
         options.setReplacingCallback(new FindEvaluator(map));
         doc.getRange().replace(Pattern.compile(regex), "", options);
 
     }
-
+*/
     /**
      *
-     * @param regex
+     * @param doc Aspose document
+     * @param regex search expression (ex "\<.+\>" angle bracket for fields tag)
      * @return map as name->[default value,comments]
-     * @throws Exception
+     * @throws Exception replace exception
      */
     Map<String,String[]> getFields(Document doc, String regex) throws Exception {
-        String dataDir="res/";
         FindReplaceOptions options = new FindReplaceOptions();
         Map<String,String[]> map= new CaseInsensitiveMap<>();
         options.setReplacingCallback(new FindEvaluator(map));
@@ -65,6 +63,7 @@ public class FindAndReplace {
         // Table manipulations
         // Get the first table in the document.
         Table firstTable = (Table) doc.getChild(NodeType.TABLE, 0, true);
+        @SuppressWarnings("unchecked")
         NodeCollection<Table> tables=doc.getChildNodes(NodeType.TABLE, true);
         for(Table tbl:tables){
             System.out.println(tbl.getTitle());
@@ -97,7 +96,7 @@ public class FindAndReplace {
      * @return tables title names array
      */
     public List<String> getTablesNames(Document doc){
-        List<String> lst=new ArrayList<String>();
+        List<String> lst= new ArrayList<>();
         @SuppressWarnings("unchecked")
         NodeCollection<Table> tables=doc.getChildNodes(NodeType.TABLE, true);
         for(Table tbl:tables){
@@ -131,17 +130,16 @@ public class FindAndReplace {
      * @return extended table objects array
      */
     public List<WordTable> getTables(Document doc){
-        List<WordTable> ret=new ArrayList<WordTable>();
+        List<WordTable> ret= new ArrayList<>();
         @SuppressWarnings("unchecked")
         NodeCollection<Table> tables=doc.getChildNodes(NodeType.TABLE, true);
-        int i=0;
         for(Table tbl:tables){
             ret.add(new WordTable(tbl.getTitle(), tbl));
         }
         return ret;
     }
 
-    public void replaceRows(Table firstTable, Table secondTable) throws Exception {
+    public void replaceRows(Table firstTable, Table secondTable) {
         firstTable.getRows().clear();
         while (secondTable.hasChildNodes())
             firstTable.getRows().add(secondTable.getFirstRow());
@@ -175,15 +173,15 @@ public class FindAndReplace {
     /**
      * @param insertAfterNode Aspose Document Node
      * @param srcDoc Aspose Document to be appended
-     * @throws Exception
      */
     //https://docs.aspose.com/display/wordsjava/How+to++Insert+a+Document+into+another+Document
-    public void insertDocument(Node insertAfterNode, Document srcDoc) throws Exception {
+    public void insertDocument(Node insertAfterNode, Document srcDoc) {
         // Make sure that the node is either a paragraph or table.
         if ((insertAfterNode.getNodeType() != NodeType.PARAGRAPH) & (insertAfterNode.getNodeType() != NodeType.TABLE))
             throw new IllegalArgumentException("The destination node should be either a paragraph or table.");
 
         // We will be inserting into the parent of the destination paragraph.
+        @SuppressWarnings( "rawtypes")
         CompositeNode dstStory = insertAfterNode.getParentNode();
 
         // This object will be translating styles and lists during the import.
@@ -192,7 +190,7 @@ public class FindAndReplace {
         // Loop through all sections in the source document.
         for (Section srcSection : srcDoc.getSections()) {
             // Loop through all block level nodes (paragraphs and tables) in the body of the section.
-            for (Node srcNode : (Iterable<Node>) srcSection.getBody()) {
+            for (Node srcNode : srcSection.getBody()) {
                 // Let's skip the node if it is a last empty paragraph in a section.
                 if (srcNode.getNodeType() == (NodeType.PARAGRAPH)) {
                     Paragraph para = (Paragraph) srcNode;
@@ -217,6 +215,7 @@ public class FindAndReplace {
      */
     public Table getTableByName(String name, Document doc){
         Table ret=null;
+        @SuppressWarnings("unchecked")
         NodeCollection<Table> tables=doc.getChildNodes(NodeType.TABLE, true);
         for(Table tbl:tables) {
             String title = tbl.getTitle();
@@ -256,11 +255,11 @@ public class FindAndReplace {
     }
 
     public static void main(String[] args) throws Exception {
-        Map<String,String> map=new HashMap<String, String>();
+        Map<String,String> map= new HashMap<>();
         //<ADD4_POSITION> <ADD4_WHOM>
         map.put("<ADD4_POSITION>","Генерала");
         map.put("<ADD4_WHOM>","Кузнецова");
-        File tmpDocx=File.createTempFile("out",".docx");
+        //File tmpDocx=File.createTempFile("out",".docx");
         File tmp=File.createTempFile("out",".pdf");
         String outName=tmp.getAbsolutePath();//DATA_DIR + "out.pdf";
         FindAndReplace obj=new FindAndReplace();

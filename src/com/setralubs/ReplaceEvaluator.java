@@ -12,7 +12,7 @@ public class ReplaceEvaluator implements IReplacingCallback {
         this.mapReplace=mapReplace;
     }
     @Override
-    public int replacing(ReplacingArgs replacingArgs) throws Exception {
+    public int replacing(ReplacingArgs replacingArgs) {
         String key=replacingArgs.getMatch().group(0).toUpperCase();
         if ( mapReplace.containsKey(key) ){
             replacingArgs.setReplacement(mapReplace.get(key));
