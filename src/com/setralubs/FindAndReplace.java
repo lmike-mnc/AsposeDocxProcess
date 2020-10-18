@@ -227,6 +227,14 @@ public class FindAndReplace {
         return ret;
     }
 
+     Document extractTable(Table table) throws Exception {
+        Document outDoc=new Document();//outTmp.getAbsolutePath());
+        NodeImporter importer = new NodeImporter(table.getDocument(), outDoc, ImportFormatMode.KEEP_SOURCE_FORMATTING);
+        Node newNode=importer.importNode(table,true);
+        outDoc.getFirstSection().getBody().appendChild(newNode);
+        return outDoc;
+    }
+
     public Document replaceWtables(InputStream isTarget, Map<String,InputStream> mapSources, Map<String,String> mapFields) throws Exception {
         Document docTarget=new Document(isTarget);
         if(mapSources!=null && !mapSources.isEmpty()){
@@ -263,13 +271,25 @@ public class FindAndReplace {
         File tmp=File.createTempFile("out",".pdf");
         String outName=tmp.getAbsolutePath();//DATA_DIR + "out.pdf";
         FindAndReplace obj=new FindAndReplace();
+
+        File outTmp=File.createTempFile("out",".docx");
+        Document srcDoc=new Document(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx"));
+        //get first table
+        Document outDoc=obj.extractTable(
+                obj.getTables(srcDoc).get(0).table
+        );
+        outDoc.save(outTmp.getAbsolutePath());
+        Desktop.getDesktop().open(outTmp);
+        if(true)return;
+
         //Workbook workbook = new Workbook(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "server-proposal.xlsx"));
         //workbook.save(tmpDocx.getAbsolutePath(), SaveFormat.DOCX);
         //Desktop.getDesktop().open(tmpDocx);
         Map<String,InputStream> mapSource=new HashMap<>();
         mapSource.put("add4_Грузополучатели"
                 ,obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "receivers.doc"));
-        Document docTarget=obj.replaceWtables(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx")
+        Document docTarget=obj.replaceWtables(
+                obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx")
             ,mapSource
             ,map);
         docTarget.save(outName);
@@ -320,4 +340,5 @@ public class FindAndReplace {
         obj.replace(new Document(DATA_DIR + "SpA_SupAgreement.docx"), "(<.+?>)", map);
 */
     }
+
 }

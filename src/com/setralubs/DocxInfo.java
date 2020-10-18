@@ -1,6 +1,7 @@
 package com.setralubs;
 
 import com.aspose.words.Document;
+import com.aspose.words.Table;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FilenameUtils;
@@ -10,10 +11,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.Authenticator;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static com.setralubs.DocxReplace.DEF_TARGET_EXT;
 
@@ -53,9 +58,33 @@ public class DocxInfo extends HttpServlet {
                         FindAndReplace obj = new FindAndReplace();
                         InputStream is=new FileInputStream(filePath);
                         Document doc=new Document(is);
-                        tblNames=obj.getTablesNames(doc);
+
                         mapFields=obj.getFields(doc, FindAndReplace.fieldRegex);
-                        params.put("tables",tblNames);
+                        tmpNode=jsonNode.get("extract");
+                        boolean bExport= tmpNode != null && tmpNode.asBoolean();
+                        if (bExport){
+                            Map<String, Table>map=obj.getTablesNamesMap(doc);
+                            params.put("tablesPath",
+                                    map.entrySet().stream()
+                                    .collect(Collectors.toMap(
+                                            Map.Entry::getKey,
+                                            e -> {
+                                                try {
+                                                    Document tmpDoc=obj.extractTable(e.getValue());
+                                                    File tmp= File.createTempFile("out","."+DEF_TARGET_EXT);
+                                                    tmpDoc.save(tmp.getAbsolutePath());
+                                                    return tmp.getAbsolutePath();
+                                                } catch (Exception exception) {
+                                                    String ret="->"+exception.getLocalizedMessage();
+                                                    exception.printStackTrace();
+                                                    return ret;
+                                                }
+                                            }))
+                            );
+                        }else{
+                            tblNames=obj.getTablesNames(doc);
+                            params.put("tables",tblNames);
+                        }
                         params.put("fields",mapFields);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);
