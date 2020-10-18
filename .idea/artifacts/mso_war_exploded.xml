@@ -11,16 +11,12 @@
           <element id="library" level="project" name="aspose-words" />
           <element id="library" level="project" name="apache-commons" />
           <element id="library" level="project" name="slf4j-log4j" />
-          <element id="library" level="project" name="jsoup" />
           <element id="library" level="project" name="commons-lang3" />
           <element id="library" level="project" name="jackson-databind" />
           <element id="library" level="project" name="jackson-core" />
           <element id="library" level="project" name="jackson-annotations-2.6.7" />
-          <element id="library" level="project" name="javax.json.bind-api-1.0" />
-          <element id="library" level="project" name="javax.json.processing-1.1.4" />
           <element id="file-copy" path="$PROJECT_DIR$/Aspose.Total.Java.lic" />
           <element id="library" level="project" name="org.apache.commons:commons-collections4:4.4" />
-          <element id="library" level="project" name="aspose-cells-19.11" />
         </element>
       </element>
     </root>
