@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class FindAndReplace {
-    static String fieldRegex = "(<.+?>)";
+    static String FLD_START="<";
+    static String FLD_END=">";
+    static String fieldRegex = "("+FLD_START+".+?"+FLD_END+")";
     final com.aspose.words.License license;
     static final String DATA_DIR = "res/";
 
