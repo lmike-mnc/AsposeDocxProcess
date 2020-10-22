@@ -66,7 +66,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                                     .collect(Collectors.joining(", ", "{", "}"))
                     );
                 }
-                tmpNode=jsonNode.get("sources");
+                tmpNode=jsonNode.get("tablesPath");
                 if (tmpNode!=null){
                     //assign source documents InputStream to map
                     mapTmp = objectMapper.convertValue(tmpNode, new TypeReference<Map<String, String>>(){});
