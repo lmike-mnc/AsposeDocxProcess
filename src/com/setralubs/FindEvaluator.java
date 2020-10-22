@@ -6,6 +6,8 @@ import com.aspose.words.ReplacingArgs;
 
 import java.util.Map;
 
+import static com.setralubs.FindAndReplace.FLD_END;
+
 public class FindEvaluator implements IReplacingCallback {
     final Map<String,String[]> map;
     final Map<String,String> mapSkip;
@@ -23,7 +25,8 @@ public class FindEvaluator implements IReplacingCallback {
         String[] values=new String[]{"",""};
         if (key.contains("|")){
             String[] tmp=key.split("\\|");
-            key=tmp[0];
+
+            key=tmp[0]+FLD_END;
             if (tmp.length>2) values[0]=tmp[1];
             values[1]=tmp.length>2?tmp[2]:tmp[1];
         }
