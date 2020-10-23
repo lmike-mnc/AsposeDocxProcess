@@ -4,7 +4,7 @@
 Will replace "fields" and tables in the **DOCX** files (it's possible to use old **DOC** format)
 Project using [Aspose engine](https://docs.aspose.com/words/java/)
 
-Here are only code and some resources without libraries(dependencies) it's possible to see info in .IdeaProject files
+Here are only code and some resources without libraries(dependencies) it's possible to see info in [.idea] files
 
 ## /DocxInfo entry point
 usage example (assume **Tomcat** on port 8080):
