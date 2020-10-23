@@ -77,7 +77,7 @@ curl -X POST -i http://localhost:8080/mso_war_exploded/DocxReplace --data '{
 ```
 ___"open"___:true - to open result file according with system file type association (awt Desktop is used)
 ___"filetype"___:"pdf" - is default output format (could be skipped), possible variands limiting by Aspose.Word type support and resticted to pdf docx html by code
-___"tablesPath":{___ - path to tables to replace according title
+___"tablesPath"___ - path to tables to replace according title
 
 **response**
 ```json
