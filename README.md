@@ -53,3 +53,6 @@ ___tablesPath___ property will be received when ___extract___ property have been
 >    "add4_грузополучатели" : "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\temp\\out7712675334286421645.docx"
 >  },
 >...
+
+## /DocxReplace entry point
+...
