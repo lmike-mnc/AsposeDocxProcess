@@ -48,8 +48,8 @@ response is json with properties: ___tables___ (array), ___fields___ (object), _
 }
 ```
 ___tablesPath___ property will be received when ___extract___ property have been specified in **request**
-```
-curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{**"extract":true**,"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
+```json
+curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"extract":true,"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
 ```
 **response**
 ```json
