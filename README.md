@@ -55,4 +55,31 @@ ___tablesPath___ property will be received when ___extract___ property have been
 >...
 
 ## /DocxReplace entry point
-...
+**request**
+>curl -X POST -i http://localhost:8080/mso_war_exploded/DocxReplace --data '{
+"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test.docx"
+,"open":true
+,"filetype":"pdf"
+,"fields":{
+  "<ADd4_POSITION>":"Генерала"
+  ,"<ADD4_WHOM>":"Кузнецова"
+}
+,"tablesPath":{
+  "add4_Грузополучатели":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\receivers.docx"
+}
+}'
+
+___"open"___:true - to open result file with according system file type association (awt Desktop is used)
+___"filetype"___:"pdf" - is default output format (could be skipped), possible variands limiting by Aspose.Word type support and resticted to pdf docx html by code
+___"tablesPath":{___ - path to tables to replace according title
+
+**response**
+>{
+  "filetype" : "pdf",
+  "requestType" : "POST",
+  "filepath" : "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\temp\\out42412272048788812.pdf",
+  "input-type" : "docx",
+  "isConverted" : true
+}
+
+___"filepath"___ result file path
