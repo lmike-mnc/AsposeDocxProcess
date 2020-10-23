@@ -8,7 +8,7 @@ Here are only code and some resources without libraries(dependencies) it's possi
 
 ## /DocxInfo entry point
 usage example (assume **Tomcat** on port 8080):
-```
+```json
 curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
 ```
 
@@ -48,7 +48,8 @@ response is json with properties: ___tables___ (array), ___fields___ (object), _
 }
 ```
 ___tablesPath___ property will be received when ___extract___ property have been specified in **request**
-```curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{**"extract":true**,"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
+```json
+curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"extract":true,"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
 ```
 **response**
 ```json
@@ -60,7 +61,7 @@ ___tablesPath___ property will be received when ___extract___ property have been
 ```
 ## /DocxReplace entry point
 **request**
-```bash
+```json
 curl -X POST -i http://localhost:8080/mso_war_exploded/DocxReplace --data '{
 "filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test.docx"
 ,"open":true
@@ -76,7 +77,7 @@ curl -X POST -i http://localhost:8080/mso_war_exploded/DocxReplace --data '{
 ```
 ___"open"___:true - to open result file according with system file type association (awt Desktop is used)
 ___"filetype"___:"pdf" - is default output format (could be skipped), possible variands limiting by Aspose.Word type support and resticted to pdf docx html by code
-___"tablesPath":{___ - path to tables to replace according title
+___"tablesPath"___ - file path (DOCX/DOC) with only table to replace in target file according table title
 
 **response**
 ```json
