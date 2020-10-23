@@ -8,7 +8,7 @@ Here are only code and some resources without libraries(dependencies) it's possi
 
 ## /DocxInfo entry point
 usage example (assume **Tomcat** on port 8080):
-```
+```json
 curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
 ```
 
@@ -48,7 +48,7 @@ response is json with properties: ___tables___ (array), ___fields___ (object), _
 }
 ```
 ___tablesPath___ property will be received when ___extract___ property have been specified in **request**
-```
+```json
 curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"extract":true,"filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test1.docx"}'
 ```
 **response**
@@ -61,7 +61,7 @@ curl -X POST -i http://localhost:8080/mso_war_exploded/DocxInfo --data '{"extrac
 ```
 ## /DocxReplace entry point
 **request**
-```
+```json
 curl -X POST -i http://localhost:8080/mso_war_exploded/DocxReplace --data '{
 "filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test.docx"
 ,"open":true
