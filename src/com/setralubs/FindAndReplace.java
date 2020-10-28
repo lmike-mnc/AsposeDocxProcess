@@ -61,7 +61,7 @@ public class FindAndReplace {
         doc.getRange().replace(Pattern.compile(regex), "", options);
         return map;
     }
-    public void tablesProcess(Document doc) throws Exception {
+    public void tablesProcess(Document doc) {
         // Table manipulations
         // Get the first table in the document.
         Table firstTable = (Table) doc.getChild(NodeType.TABLE, 0, true);
