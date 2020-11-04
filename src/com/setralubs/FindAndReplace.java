@@ -6,6 +6,9 @@ import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -270,8 +273,10 @@ public class FindAndReplace {
         map.put("<ADD4_POSITION>","Генерала");
         map.put("<ADD4_WHOM>","Кузнецова");
         //File tmpDocx=File.createTempFile("out",".docx");
-        File tmp=File.createTempFile("out",".pdf");
-        String outName=tmp.getAbsolutePath();//DATA_DIR + "out.pdf";
+        String tmpDir=System.getProperty("java.io.tmpdir");
+        System.out.println("TEMP>"+tmpDir);
+        Path tmp= Files.createTempFile(Paths.get(tmpDir),"out",".pdf");
+        String outName=tmp.toFile().getAbsolutePath();//DATA_DIR + "out.pdf";
         FindAndReplace obj=new FindAndReplace();
 
         File outTmp=File.createTempFile("out",".docx");
@@ -297,7 +302,7 @@ public class FindAndReplace {
         docTarget.save(outName);
         System.out.println("saved to: "+outName);
         System.out.println(System.getProperty("os.name"));
-        Desktop.getDesktop().open(tmp);
+        Desktop.getDesktop().open(tmp.toFile());
         if(true)return;
         //target document
         Document doc = new Document(obj.getClass().getClassLoader().getResourceAsStream(DATA_DIR + "add4_test.docx"));
@@ -331,7 +336,7 @@ public class FindAndReplace {
         doc.save(outName);
         System.out.println("saved to: "+outName);
         System.out.println(System.getProperty("os.name"));
-        Desktop.getDesktop().open(tmp);
+        Desktop.getDesktop().open(tmp.toFile());
 /*
         System.exit(0);
 

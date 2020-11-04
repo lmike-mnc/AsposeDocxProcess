@@ -9,6 +9,9 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,8 +104,10 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                         if (!mapSources.isEmpty()
                                 || mapFields!=null
                                 || !fileType.equalsIgnoreCase(DEF_TARGET_EXT)) {
-                            File tmp = File.createTempFile("out", "." + fileType);
-                            filePath = tmp.getAbsolutePath();
+//                            File tmp = File.createTempFile("out", "." + fileType);
+
+                            Path tmp = getTmpPath();
+                            filePath = tmp.toFile().getAbsolutePath();
                             params.put("isConverted",true);
                             docTarget.save(filePath);
                         }else params.put("isConverted",false);
@@ -117,6 +122,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 }
                 tmpNode =jsonNode.get("open");
                 bOpen= tmpNode != null && tmpNode.asBoolean();
+                System.out.println("is it possible to open interactively:"+Desktop.getDesktop().isSupported(Desktop.Action.OPEN));
                 if (filePath!=null && bOpen)Desktop.getDesktop().open(new File(filePath));
             } catch (IOException e) {
                 errs.add("ioError> "+ e.getLocalizedMessage());
@@ -136,6 +142,13 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     }
 
 }
+
+    private Path getTmpPath() throws IOException {
+        String tmpDir=System.getProperty("java.io.tmpdir");
+        System.out.println("TEMP>"+tmpDir);
+        Path tmp= Files.createTempFile(Paths.get(tmpDir),"out",".pdf");
+        return tmp;
+    }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;

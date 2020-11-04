@@ -24,6 +24,7 @@ import static com.setralubs.DocxReplace.DEF_TARGET_EXT;
 
 @WebServlet(name = "DocxInfo")
 public class DocxInfo extends HttpServlet {
+    final Map<String, Object> params = new HashMap<>();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         PrintWriter out;
         try {
@@ -32,7 +33,7 @@ public class DocxInfo extends HttpServlet {
             response.setContentType("application/json;charset=utf-8");
             response.setCharacterEncoding("UTF-8");
             out = response.getWriter();
-            Map<String, Object> params = new HashMap<>();
+            params.clear();
             params.put("requestType",request.getMethod());
             //String sout = "{\"requestType\":\"" + request.getMethod() + "\"";
             ObjectMapper objectMapper = new ObjectMapper();
@@ -117,9 +118,20 @@ public class DocxInfo extends HttpServlet {
 
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("application/json;charset=utf-8");
         response.setCharacterEncoding("UTF-8");
-
+        //return temp dir by default
+        params.clear();
+        params.put("requestType",request.getMethod());
+        params.put("filepath", System.getProperty("java.io.tmpdir"));
+        PrintWriter out;
+        try {
+            String sout= new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(params);
+            out = response.getWriter();
+            out.println(sout);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
