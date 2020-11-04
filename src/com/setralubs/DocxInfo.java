@@ -84,7 +84,7 @@ public class DocxInfo extends HttpServlet {
                             );
                         }else{
                             tblNames=obj.getTablesNames(doc);
-                            params.put("tables",tblNames);
+                            if (!tblNames.isEmpty())params.put("tables",tblNames);
                         }
                         params.put("fields",mapFields);
                     }else {
