@@ -2,11 +2,12 @@
 "filepath":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\add4_test.docx"
 ,"open":"true"
 ,"filetype":"pdf"
+,"title":"Display DOCX title"
 ,"fields":{
   "<ADD4_POSITION>":"Генерала"
   ,"<ADD4_WHOM>":"Кузнецова"
 }
-,"sources":{
+,"tablesPath":{
   "add4_Грузополучатели":"C:\\Users\\mike\\Documents\\Development\\Java\\mso\\src\\res\\receivers.docx"
 }
 }
