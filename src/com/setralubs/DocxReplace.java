@@ -117,13 +117,16 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             Path tmp = getTmpPath();
                             filePath = tmp.toFile().getAbsolutePath();
                             params.put("isConverted",true);
+                            PdfSaveOptions saveOptions = null;
                             if (!title.isEmpty()){
                                 BuiltInDocumentProperties props = docTarget.getBuiltInDocumentProperties();
                                 props.setTitle(title);
-                                PdfSaveOptions saveOptions = new PdfSaveOptions();
-                                saveOptions.setDisplayDocTitle(true);
+                                if (fileType.equalsIgnoreCase("pdf")) {
+                                    saveOptions = new PdfSaveOptions();
+                                    saveOptions.setDisplayDocTitle(true);
+                                }
                             }
-                            docTarget.save(filePath);
+                            docTarget.save(filePath,saveOptions);
                         }else params.put("isConverted",false);
                         params.put("filepath",filePath);
                     }else {
@@ -161,7 +164,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         String tmpDir=System.getProperty("java.io.tmpdir");
         System.out.println("TEMP>"+tmpDir);
         String prefix="out";
-        if (title.isEmpty())prefix=title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        if (!title.isEmpty())prefix=title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
         Path tmp= Files.createTempFile(Paths.get(tmpDir),prefix,"." + fileType);
         return tmp;
     }
