@@ -1,5 +1,6 @@
 package com.setralubs;
 
+import com.aspose.words.BuiltInDocumentProperties;
 import com.aspose.words.Document;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -115,6 +116,10 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             Path tmp = getTmpPath();
                             filePath = tmp.toFile().getAbsolutePath();
                             params.put("isConverted",true);
+                            if (!title.isEmpty()){
+                                BuiltInDocumentProperties props = docTarget.getBuiltInDocumentProperties();
+                                props.setTitle(title);
+                            }
                             docTarget.save(filePath);
                         }else params.put("isConverted",false);
                         params.put("filepath",filePath);
