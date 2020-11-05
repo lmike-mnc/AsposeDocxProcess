@@ -2,6 +2,7 @@ package com.setralubs;
 
 import com.aspose.words.BuiltInDocumentProperties;
 import com.aspose.words.Document;
+import com.aspose.words.PdfSaveOptions;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -119,6 +120,8 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             if (!title.isEmpty()){
                                 BuiltInDocumentProperties props = docTarget.getBuiltInDocumentProperties();
                                 props.setTitle(title);
+                                PdfSaveOptions saveOptions = new PdfSaveOptions();
+                                saveOptions.setDisplayDocTitle(true);
                             }
                             docTarget.save(filePath);
                         }else params.put("isConverted",false);
