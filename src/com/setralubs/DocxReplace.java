@@ -24,6 +24,10 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     public static final String DEF_TARGET_EXT = "docx";
     //valid output types
     static List<String>validTypes=new ArrayList<>();
+    String filePath;
+    String fileType;
+    String title;
+
 
     static {
         validTypes.add("docx");
@@ -50,8 +54,6 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                 Map<String,InputStream> mapSources = new CaseInsensitiveMap<>();
 
                 JsonNode tmpNode;
-                String filePath;
-                String fileType;
                 boolean bOpen;
                 JsonNode fieldsNode;
 
@@ -88,6 +90,10 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                                     fileNotFoundException.printStackTrace();
                                 }
                             });
+                }
+                tmpNode=jsonNode.get("title");
+                if (tmpNode!=null){
+                    title= tmpNode.asText();
                 }
                 //replace and convert
                 if(filePath!=null){
@@ -146,7 +152,9 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     private Path getTmpPath() throws IOException {
         String tmpDir=System.getProperty("java.io.tmpdir");
         System.out.println("TEMP>"+tmpDir);
-        Path tmp= Files.createTempFile(Paths.get(tmpDir),"out",".pdf");
+        String prefix="out";
+        if (title.isEmpty())prefix=title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        Path tmp= Files.createTempFile(Paths.get(tmpDir),prefix,"." + fileType);
         return tmp;
     }
 

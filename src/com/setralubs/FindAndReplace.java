@@ -285,6 +285,9 @@ public class FindAndReplace {
         Document outDoc=obj.extractTable(
                 obj.getTables(srcDoc).get(0).table
         );
+        BuiltInDocumentProperties props = outDoc.getBuiltInDocumentProperties();
+        props.clear();
+        props.setTitle("Aspose.Words");
         outDoc.save(outTmp.getAbsolutePath());
         Desktop.getDesktop().open(outTmp);
         if(true)return;
