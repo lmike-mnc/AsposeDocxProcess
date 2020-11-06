@@ -164,7 +164,12 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         String tmpDir=System.getProperty("java.io.tmpdir");
         System.out.println("TEMP>"+tmpDir);
         String prefix="out";
-        if (!title.isEmpty())prefix=title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")+"-";
+        if (!title.isEmpty())
+            prefix=
+                //title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")
+                title.replaceAll("[\\*/\\\\!\\|:?<>]", "_")
+                .replaceAll("(%22)", "_")
+                        +"-";
         Path tmp= Files.createTempFile(Paths.get(tmpDir),prefix,"." + fileType);
         return tmp;
     }
