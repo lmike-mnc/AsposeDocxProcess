@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import static com.setralubs.FindAndReplace.DATA_DIR;
 
 public class DocxReplace extends javax.servlet.http.HttpServlet {
+    public short NAME_LIMIT=230; //255 - 25 (20 - temp name len + "." +4 for extension +1 for "-")
     public static final String DEF_TARGET_EXT = "docx";
     //valid output types
     static List<String>validTypes=new ArrayList<>();
@@ -167,8 +168,8 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         if (!title.isEmpty())
             prefix=
                 //title.replaceAll("[^a-zA-Z0-9\\.\\-]", "_")
-                title.replaceAll("[\\*/\\\\!\\|:?<>]", "_")
-                .replaceAll("(%22)", "_")
+                UTF8Cutter.cut(title.replaceAll("[\\*/\\\\!\\|:?<>]", "_")
+                .replaceAll("(%22)", "_"),NAME_LIMIT)
                         +"-";
         Path tmp= Files.createTempFile(Paths.get(tmpDir),prefix,"." + fileType);
         return tmp;
