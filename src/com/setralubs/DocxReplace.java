@@ -160,7 +160,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     }
 
 }
-
+//https://superuser.com/a/358861
     private Path getTmpPath() throws IOException {
         String tmpDir=System.getProperty("java.io.tmpdir");
         System.out.println("TEMP>"+tmpDir);
