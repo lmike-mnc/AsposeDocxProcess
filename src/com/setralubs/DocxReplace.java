@@ -27,6 +27,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     public static final String DEF_TARGET_EXT = "docx";
     //valid output types
     static List<String>validTypes=new ArrayList<>();
+    static List<String>validInputTypes=new ArrayList<>();
     String filePath;
     String fileType;
     String title;
@@ -36,6 +37,12 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         validTypes.add("docx");
         validTypes.add("pdf");
         validTypes.add("html");
+    }
+    static {
+        validInputTypes.add("docx");
+        validInputTypes.add("dotx");
+        validInputTypes.add("doc");
+        validInputTypes.add("dot");
     }
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
         PrintWriter out;
@@ -105,7 +112,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                     params.put("filetype",fileType);
                     params.put("input-type",ext);
                     //target doc checking
-                    if (ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
+                    if (validInputTypes.contains(ext.toLowerCase())){//(ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
                         FindAndReplace obj = new FindAndReplace();
                         Document docTarget = obj.replaceWtables(new FileInputStream(filePath),
                                 mapSources, mapFields);

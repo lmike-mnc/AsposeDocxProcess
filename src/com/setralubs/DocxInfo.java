@@ -21,6 +21,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.setralubs.DocxReplace.DEF_TARGET_EXT;
+import static com.setralubs.DocxReplace.validInputTypes;
 
 @WebServlet(name = "DocxInfo")
 public class DocxInfo extends HttpServlet {
@@ -55,7 +56,7 @@ public class DocxInfo extends HttpServlet {
                     System.out.println("extension: "+ext);
                     params.put("input-type",ext);
                     //target doc checking
-                    if (ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
+                    if (validInputTypes.contains(ext.toLowerCase())) {
                         FindAndReplace obj = new FindAndReplace();
                         InputStream is=new FileInputStream(filePath);
                         Document doc=new Document(is);
