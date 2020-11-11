@@ -36,6 +36,12 @@ public class FindAndReplace {
     void replace(Document doc, String regex, Map<String,String> map) throws Exception {
         FindReplaceOptions options = new FindReplaceOptions();
         options.setReplacingCallback(new ReplaceEvaluator(map));
+/*
+        Style style = doc.getStyles().add(StyleType.PARAGRAPH, "myBullet");
+        style.getListFormat().setList(doc.getLists().add(ListTemplate.BULLET_DEFAULT));
+        style.getListFormat().setListLevelNumber(0);
+        options.getApplyParagraphFormat().setStyle(style);//.setKeepWithNext(true);
+*/
 
         doc.getRange().replace(Pattern.compile(regex), "", options);
         //String outName= DATA_DIR + "Range.ReplaceWithEvaluator_Out.docx";
