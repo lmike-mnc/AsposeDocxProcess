@@ -7,7 +7,6 @@
       </element>
       <element id="library" level="project" name="apache-commons" />
       <element id="library" level="project" name="slf4j-log4j" />
-      <element id="library" level="project" name="aspose-words" />
     </root>
   </artifact>
 </component>
