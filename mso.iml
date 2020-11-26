@@ -70,5 +70,6 @@
     <orderEntry type="library" name="Maven: org.jogamp.gluegen:gluegen-rt:natives-windows-amd64:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.jogamp.gluegen:gluegen-rt:natives-windows-i586:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.aspose:aspose-words:javadoc:20.6" level="project" />
+    <orderEntry type="library" name="Maven: com.ibm.icu:icu4j:68.1" level="project" />
   </component>
 </module>

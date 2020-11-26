@@ -25,6 +25,12 @@
             <name>Aspose Java API</name>
             <url>https://repository.aspose.com/repo/</url>
         </repository>
+        <repository>
+            <id>ICU4J</id>
+            <name>UCU4</name>
+            <url>https://mvnrepository.com/artifact/com.ibm.icu/icu4j</url>
+        </repository>
+
     </repositories>
     <dependencies>
         <dependency>
@@ -39,6 +45,13 @@
             <version>20.6</version>
             <classifier>javadoc</classifier>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>68.1</version>
+        </dependency>
+
     </dependencies>
 
     
