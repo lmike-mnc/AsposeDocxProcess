@@ -114,7 +114,8 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                     //target doc checking
                     if (validInputTypes.contains(ext.toLowerCase())){//(ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
                         FindAndReplace obj = new FindAndReplace();
-                        Document docTarget = obj.replaceWtables(new FileInputStream(filePath),
+                        InputStream is=new FileInputStream(filePath);
+                        Document docTarget = obj.replaceWtables(is,
                                 mapSources, mapFields);
                         //if should be changed
                         if (!mapSources.isEmpty()
@@ -136,6 +137,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             }
                             docTarget.save(filePath,saveOptions);
                         }else params.put("isConverted",false);
+                        is.close();
                         params.put("filepath",filePath);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);
