@@ -1,5 +1,6 @@
 package com.setralubs;
 
+import com.aspose.words.BuiltInDocumentProperties;
 import com.aspose.words.Document;
 import com.aspose.words.Table;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,13 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.Authenticator;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.setralubs.DocxReplace.DEF_TARGET_EXT;
@@ -61,6 +59,9 @@ public class DocxInfo extends HttpServlet {
                         InputStream is=new FileInputStream(filePath);
                         Document doc=new Document(is);
 
+                        BuiltInDocumentProperties props = doc.getBuiltInDocumentProperties();
+                        params.put("title",props.getTitle());
+
                         mapFields=obj.getFields(doc, FindAndReplace.fieldRegex);
                         tmpNode=jsonNode.get("extract");
                         boolean bExport= tmpNode != null && tmpNode.asBoolean();
@@ -87,6 +88,7 @@ public class DocxInfo extends HttpServlet {
                             tblNames=obj.getTablesNames(doc);
                             if (!tblNames.isEmpty())params.put("tables",tblNames);
                         }
+                        is.close();
                         params.put("fields",mapFields);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);
