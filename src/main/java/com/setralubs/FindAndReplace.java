@@ -150,6 +150,16 @@ public class FindAndReplace {
         return ret;
     }
 
+    /**
+     * replace doc CustomProperties according map, as: value -> param name, key -> param value
+     * @param doc word document
+     * @param map map with fields name->description
+     */
+    public void replaceInfo(Document doc, Map<String,String> map){
+        CustomDocumentProperties props = doc.getCustomDocumentProperties();
+        map.forEach((key, value) -> props.add(value, key));
+    }
+
     public void replaceRows(Table firstTable, Table secondTable) {
         firstTable.getRows().clear();
         while (secondTable.hasChildNodes())
@@ -269,6 +279,32 @@ public class FindAndReplace {
         }
         if (mapFields!=null){
             replace(docTarget,fieldRegex, mapFields);
+        }
+        return docTarget;
+    }
+    public Document replaceWtablesProps(InputStream isTarget, Map<String,InputStream> mapSources, Map<String,String> mapFields) throws Exception {
+        Document docTarget=new Document(isTarget);
+        if(mapSources!=null && !mapSources.isEmpty()){
+            final Map <String,Table> mapTables=getTablesNamesMap(docTarget);
+            mapSources.entrySet().stream()
+                    .filter(e->mapTables.containsKey(e.getKey()))
+                    .forEach(e->{
+                                Table tbl2replace=mapTables.get(e.getKey());
+                                try {
+                                    //first table in source doc
+                                    //Table tblSource= (Table) (new Document(e.getValue())).getChildNodes(NodeType.TABLE, true).get(0);
+                                    Document doc=new Document(e.getValue());
+                                    System.out.println("replacing table: "+e.getKey());
+                                    insertDocument(tbl2replace,doc);
+                                    tbl2replace.remove();
+                                } catch (Exception exception) {
+                                    exception.printStackTrace();
+                                }
+                            }
+                    );
+        }
+        if (mapFields!=null){
+            replaceInfo(docTarget, mapFields);
         }
         return docTarget;
     }

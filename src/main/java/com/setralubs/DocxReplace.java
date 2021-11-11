@@ -28,19 +28,19 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
     //valid output types
     static List<String>validTypes=new ArrayList<>();
     static List<String>validInputTypes=new ArrayList<>();
-    String filePath;
     String fileType;
     String title;
 
-
     static {
         validTypes.add("docx");
+        validTypes.add("dotm");
         validTypes.add("pdf");
         validTypes.add("html");
     }
     static {
         validInputTypes.add("docx");
         validInputTypes.add("dotx");
+        validInputTypes.add("dotm");
         validInputTypes.add("doc");
         validInputTypes.add("dot");
     }
@@ -49,6 +49,8 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
         try {
             response.setContentType("application/json;charset=utf-8");
             response.setCharacterEncoding("UTF-8");
+
+            String filePath;
 
             out = response.getWriter();
             Map<String, Object> params = new HashMap<>();
@@ -102,9 +104,7 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             });
                 }
                 tmpNode=jsonNode.get("title");
-                if (tmpNode!=null){
-                    title= tmpNode.asText();
-                }
+                title=tmpNode!=null?tmpNode.asText():"";
                 //replace and convert
                 if(filePath!=null){
                     String ext=FilenameUtils.getExtension(filePath);
@@ -115,8 +115,18 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                     if (validInputTypes.contains(ext.toLowerCase())){//(ext.equalsIgnoreCase(DEF_TARGET_EXT)) {
                         FindAndReplace obj = new FindAndReplace();
                         InputStream is=new FileInputStream(filePath);
-                        Document docTarget = obj.replaceWtables(is,
-                                mapSources, mapFields);
+                        Document docTarget;
+
+                        tmpNode=jsonNode.get("setAsProp");
+                        //if document custom props should be replaced
+                        if (tmpNode!=null) {
+                            docTarget=obj.replaceWtablesProps(is,
+                                    mapSources, mapFields);
+                        }else{
+                            docTarget=obj.replaceWtables(is,
+                                    mapSources, mapFields);
+                        }
+
                         //if should be changed
                         if (!mapSources.isEmpty()
                                 || mapFields!=null
@@ -138,6 +148,18 @@ public class DocxReplace extends javax.servlet.http.HttpServlet {
                             docTarget.save(filePath,saveOptions);
                         }else params.put("isConverted",false);
                         is.close();
+/*
+                        if (!mapSources.isEmpty()) {
+                            mapSources.forEach((key,value ) -> {
+                                try {
+                                    value.close();
+                                } catch (IOException e) {
+                                    System.out.println("Error while close stream for table: " +key);
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+*/
                         params.put("filepath",filePath);
                     }else {
                         errs.add("targetFileTypeError> input file type is wrong: "+ext);

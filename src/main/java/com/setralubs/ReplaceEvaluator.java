@@ -20,14 +20,19 @@ public class ReplaceEvaluator implements IReplacingCallback {
             key=tmp[0]+FLD_END;;
         }
         if ( mapReplace.containsKey(key) ){
-            ReplacingArgs e=replacingArgs;
-            DocumentBuilder builder = new DocumentBuilder((Document) e.getMatchNode().getDocument());
-            builder.moveTo(e.getMatchNode());
             //builder.insertHtml("<b><font color='red'>James Bond, </font></b><br>Bullet");
-            //will preserve style across line breaks
-            builder.write(mapReplace.get(key));
-            e.setReplacement("");
-            //replacingArgs.setReplacement(mapReplace.get(key));
+            if (mapReplace.get(key).contains("\n")) {
+                ////!some bug - it can shift position of the text (to left across some symbols if space present) after replacement
+                //will preserve style across line breaks
+                ReplacingArgs e = replacingArgs;
+                //e.getMatchNode().getNextSibling();
+                DocumentBuilder builder = new DocumentBuilder((Document) e.getMatchNode().getDocument());
+                builder.moveTo(e.getMatchNode());
+                builder.write(mapReplace.get(key));
+                e.setReplacement("");
+            }else {
+                replacingArgs.setReplacement(mapReplace.get(key));
+            }
             return ReplaceAction.REPLACE;
         }
         return ReplaceAction.SKIP;
