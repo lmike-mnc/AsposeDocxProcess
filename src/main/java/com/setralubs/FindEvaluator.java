@@ -27,15 +27,22 @@ public class FindEvaluator implements IReplacingCallback {
             String[] tmp=key.split("\\|");
 
             key=tmp[0]+FLD_END;
-            if (tmp.length>2) {
+            //there are format <fld_name|fld_value|fld_description[fld_example]>
+            //or <fld_name|fld_value>
+            if (tmp.length>1) {
+                //apply default value
                 values[0] = tmp[1];
+                //apply comments
                 values[1] = tmp.length > 2 ?
+                        //end with extra FLD_END sign
                         (tmp[2].endsWith(FLD_END) ? tmp[2].substring(0, tmp[2].length() - 1)
                                 : tmp[2])
                         : tmp[1];
             }
         }
+        //fill map with new
         if (!map.containsKey(key))map.put(key, values);
+        //do nothing (only find)
         return ReplaceAction.SKIP;
     }
 }
